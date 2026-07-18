@@ -43,7 +43,7 @@ Matches the V1 specification §6 plus `docs/` (errata §12). All SQLite files st
 | **6** | Events, Founder Dashboard metrics | Stop for approval |
 | **7** | Hardening, docs, acceptance verification | Stop for approval |
 
-**Rule:** Do not start the next phase without explicit approval (errata §13).
+**Rule:** Errata §13 requires phase gates. The product owner later directed Phases 3–7 to be completed in one pass after Phase 2 approval.
 
 ## Phase 1 deliverables
 

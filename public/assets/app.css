@@ -326,6 +326,110 @@ button.button-primary:hover {
     margin-left: 0;
 }
 
+.stack-form textarea,
+.stack-form select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 0.7rem 0.8rem;
+    font: inherit;
+}
+
+.stack-form textarea:focus,
+.stack-form select:focus {
+    outline: 2px solid rgba(61, 156, 240, 0.35);
+    border-color: var(--accent);
+}
+
+.project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.project-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(42, 53, 68, 0.85);
+}
+
+.project-row:first-child {
+    border-top: 0;
+    padding-top: 0.2rem;
+}
+
+.project-row .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 0.45rem 0 0;
+}
+
+.metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.metric {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+}
+
+.metric-label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+}
+
+.metric strong {
+    font-size: 1.6rem;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.data-table th,
+.data-table td {
+    text-align: left;
+    padding: 0.75rem 0.55rem;
+    border-top: 1px solid rgba(42, 53, 68, 0.85);
+    vertical-align: top;
+}
+
+.data-table th {
+    color: var(--muted);
+    font-weight: 500;
+    border-top: 0;
+}
+
+.button-row.compact {
+    margin-top: 0;
+    gap: 0.4rem;
+}
+
+.button-row.compact .button,
+.button-row.compact button {
+    min-height: 2.1rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.85rem;
+}
+
 @media (max-width: 640px) {
     .site-footer {
         flex-direction: column;
@@ -340,5 +444,17 @@ button.button-primary:hover {
         align-items: flex-start;
         flex-direction: column;
         gap: 0.75rem;
+    }
+
+    .metrics-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .project-row {
+        flex-direction: column;
+    }
+
+    .site-nav {
+        flex-wrap: wrap;
     }
 }

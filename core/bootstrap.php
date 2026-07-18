@@ -14,6 +14,12 @@ require_once $root . '/core/MigrationRunner.php';
 require_once $root . '/core/Session.php';
 require_once $root . '/core/View.php';
 require_once $root . '/core/Auth.php';
+require_once $root . '/core/Csrf.php';
+require_once $root . '/core/Project.php';
+require_once $root . '/core/ProjectContext.php';
+require_once $root . '/core/ProjectFactory.php';
+require_once $root . '/core/EventLogger.php';
+require_once $root . '/core/FounderMetrics.php';
 require_once $root . '/core/helpers.php';
 
 Config::load($root);
