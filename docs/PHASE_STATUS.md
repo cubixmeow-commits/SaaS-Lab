@@ -2,102 +2,92 @@
 
 ## Current phase
 
-**Phase 1 — Foundation** (complete — awaiting approval to start Phase 2)
+**Phase 2 — Shared authentication** (complete — awaiting approval to start Phase 3)
 
-## Completed
+## Completed phases
 
-Phase 1: configuration, bootstrap, error handling, SQLite connection, migration runner, browser installer, `.gitignore`, docs plan.
+- Phase 1 — Foundation (installer, SQLite, migrations, bootstrap)
+- Phase 2 — Shared authentication (register/login/logout/profile/roles/visit token)
+
+## Phase 2 summary
+
+Implemented shared account authentication on top of the Phase 1 platform schema.
+
+- `Auth` service with the public `auth()` helper API
+- Registration, login, logout, and profile (display name) pages
+- Password hashing/verification, generic failure messaging
+- Admin/member roles and suspended-account rejection
+- Session ID regeneration after authentication
+- Stable `lab_visit_token` (survives regenerate; cleared on logout)
+- `lab_opened_projects` session set helpers for later event dedupe (cleared on logout)
+- `requireLogin()` / `requireAdmin()` / `canAccessProject()` authorization helpers
+- Routes: `/register`, `/login`, `/logout`, `/profile`
 
 ## Files created
 
 ```
 CREATED
-.gitignore
-README.md
-SECURITY.md
-config.local.example.php
-config/config.example.php
-core/Config.php
-core/Database.php
-core/MigrationRunner.php
-core/Session.php
-core/View.php
-core/Installer.php
-core/Router.php
-core/bootstrap.php
-core/helpers.php
-migrations/platform/001_create_schema_migrations.sql
-migrations/platform/002_create_users.sql
-migrations/platform/003_create_projects.sql
-migrations/platform/004_create_project_events.sql
-data/.gitkeep
-projects/.gitkeep
-storage/logs/.gitkeep
-storage/uploads/.gitkeep
-templates/.gitkeep
-public/.htaccess
-public/index.php
-public/assets/app.css
-public/assets/app.js
-install.php
-app/install/pages/install.php
-app/install/views/install.php
-app/shared/pages/home.php
-app/shared/views/home.php
-app/shared/views/layouts/main.php
-app/shared/views/errors/404.php
-app/account/pages/.gitkeep
-app/account/views/.gitkeep
-app/founder/pages/.gitkeep
-app/founder/views/.gitkeep
-docs/V1_IMPLEMENTATION_PLAN.md
-docs/PHASE_STATUS.md
-docs/screenshot-placeholder.svg
-scripts/verify_phase1.php
+core/Auth.php
+app/account/pages/register.php
+app/account/pages/login.php
+app/account/pages/logout.php
+app/account/pages/profile.php
+app/account/views/register.php
+app/account/views/login.php
+app/account/views/logout.php
+app/account/views/profile.php
+app/shared/views/errors/403.php
+scripts/verify_phase2.php
 ```
 
 ## Files modified
 
 ```
 MODIFIED
-README.md
+core/bootstrap.php
+core/helpers.php
+core/Router.php
+app/shared/pages/home.php
+app/shared/views/home.php
+app/shared/views/layouts/main.php
+app/install/pages/install.php
+public/assets/app.css
+docs/PHASE_STATUS.md
 ```
-
-(`README.md` replaced the initial one-paragraph stub.)
 
 ## Verification performed
 
-1. `php -l` on all PHP files — no syntax errors.
-2. `php scripts/verify_phase1.php` — passed:
-   - Config local overrides
-   - Session cookie path derived as `/saas-lab/` from subdirectory `base_url`
-   - Installer environment checks
-   - Admin creation + `installed.lock`
-   - Tables: `schema_migrations`, `users`, `projects`, `project_events`
-   - Four migrations recorded
-   - Password hashed/verifiable
-   - `projects.is_active` absent
-   - Installer refuses rerun when locked
-   - Migration currency short-circuit
-3. PHP built-in server HTTP check (`php -S 127.0.0.1:8080` in `public/`):
-   - `GET /install` → 200, all checks OK, admin form shown
-   - `POST /install` with valid CSRF → 302, `platform.sqlite` + lock + admin row
-   - Flash survives redirect
-   - Invalid CSRF → 419
+1. `php -l` on application PHP files — clean
+2. `php scripts/verify_phase2.php` — passed:
+   - Registration + auto-login
+   - Duplicate registration generic failure
+   - Login success/failure
+   - Suspended user blocked
+   - Logout clears auth, visit token, opened-projects set
+   - Admin vs member role / archived access rules
+   - Profile name update
+   - Visit token stability within a visit
+3. HTTP checks via `php -S 127.0.0.1:8080`:
+   - Install → redirect to `/login`
+   - Admin login → home shows signed-in admin
+   - Profile name update persists
+   - Logout → `/login`
+   - Member registration works
+   - Duplicate registration shows generic error
+   - Invalid login shows generic error
+   - Unauthenticated `/profile` redirects to `/login`
 
 ## Known issues / notes
 
-- Runtime artifacts from local verification (`data/platform.sqlite`, `data/installed.lock`, `config.local.php`) are gitignored and must not be committed.
-- Authentication UI (register/login/logout/profile) is intentionally deferred to Phase 2; installer only creates the first admin row.
-- Full Hostinger deployment acceptance is deferred until later phases.
-- Google Fonts CDN is used for IBM Plex; falls back to system fonts if unreachable.
+- Founder Dashboard routes are not wired yet; `requireAdmin()` is ready for Phase 3.
+- Email change and password reset remain out of V1 scope by design.
+- Runtime DB/lock files from local verification are gitignored.
 
 ## Assumptions
 
-- Document root points at `public/`.
-- `config.local.php` is required before installer proceeds (copied from `config.local.example.php`).
-- PHP 8.2+ with `pdo_sqlite` (verified with 8.3.6 in this environment).
+- Same as Phase 1: document root `public/`, `config.local.php` required for install.
+- V1 uses all-members access for `lab` projects; archived is admin-only.
 
 ## Next phase (do not start without approval)
 
-**Phase 2 — Shared authentication:** registration, login, logout, sessions/visit token, profile, roles, suspend support at login.
+**Phase 3 — Platform routing and layouts:** expand front controller for `/projects`, `/founder`, authorization gates, and shared authenticated layouts.

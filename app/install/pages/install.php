@@ -19,8 +19,8 @@ if (!$alreadyInstalled && strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GE
     );
 
     if ($result['ok']) {
-        flash('success', 'SaaS Lab is installed. You can log in once authentication is available.');
-        redirect('/install');
+        flash('success', 'SaaS Lab is installed. Sign in with your administrator account to continue.');
+        redirect('/login');
     }
 
     $errors = $result['errors'];

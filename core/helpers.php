@@ -169,3 +169,15 @@ function view(string $name, array $data = [], ?string $layout = 'main'): void
 {
     View::render(app_root(), $name, $data, $layout);
 }
+
+function auth(): Auth
+{
+    return Auth::instance();
+}
+
+function require_installed(): void
+{
+    if (!is_installed()) {
+        redirect('/install');
+    }
+}

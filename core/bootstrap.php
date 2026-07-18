@@ -13,6 +13,7 @@ require_once $root . '/core/Database.php';
 require_once $root . '/core/MigrationRunner.php';
 require_once $root . '/core/Session.php';
 require_once $root . '/core/View.php';
+require_once $root . '/core/Auth.php';
 require_once $root . '/core/helpers.php';
 
 Config::load($root);

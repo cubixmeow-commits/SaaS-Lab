@@ -2,6 +2,7 @@
 /** @var string $content */
 /** @var string|null $title */
 $pageTitle = trim(($title ?? '') !== '' ? (string) $title . ' · ' : '') . (string) config('app_name', 'SaaS Lab');
+$currentUser = is_installed() ? auth()->user() : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +18,15 @@ $pageTitle = trim(($title ?? '') !== '' ? (string) $title . ' · ' : '') . (stri
         <nav class="site-nav" aria-label="Primary">
             <?php if (!is_installed()): ?>
                 <a href="<?= e(url_path('/install')) ?>">Install</a>
+            <?php elseif ($currentUser !== null): ?>
+                <a href="<?= e(url_path('/profile')) ?>">Profile</a>
+                <?php if (($currentUser['role'] ?? '') === 'admin'): ?>
+                    <span class="nav-meta">Admin</span>
+                <?php endif; ?>
+                <a href="<?= e(url_path('/logout')) ?>">Sign out</a>
+            <?php else: ?>
+                <a href="<?= e(url_path('/login')) ?>">Sign in</a>
+                <a href="<?= e(url_path('/register')) ?>">Register</a>
             <?php endif; ?>
         </nav>
     </header>

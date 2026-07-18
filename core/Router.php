@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 /**
- * Minimal front-controller router.
- * Phase 1 wires home + installer; later phases expand routes.
+ * Front-controller router for platform account and installer routes.
+ * Project and founder routes expand in later phases.
  */
 final class Router
 {
@@ -23,15 +23,23 @@ final class Router
             return;
         }
 
-        if ($path === '/' || $path === '') {
-            if (!is_installed()) {
-                redirect('/install');
-            }
-            // Placeholder until Phase 3 account routes exist.
-            require $this->rootPath . '/app/shared/pages/home.php';
-            return;
+        // Remaining routes require a completed installation.
+        if (!is_installed()) {
+            redirect('/install');
         }
 
+        match ($path) {
+            '/', '' => require $this->rootPath . '/app/shared/pages/home.php',
+            '/register' => require $this->rootPath . '/app/account/pages/register.php',
+            '/login' => require $this->rootPath . '/app/account/pages/login.php',
+            '/logout' => require $this->rootPath . '/app/account/pages/logout.php',
+            '/profile' => require $this->rootPath . '/app/account/pages/profile.php',
+            default => $this->notFound(),
+        };
+    }
+
+    private function notFound(): void
+    {
         http_response_code(404);
         view('shared/errors/404', [
             'title' => 'Not found',
