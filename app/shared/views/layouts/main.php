@@ -3,6 +3,7 @@
 /** @var string|null $title */
 $pageTitle = trim(($title ?? '') !== '' ? (string) $title . ' · ' : '') . (string) config('app_name', 'SaaS Lab');
 $currentUser = is_installed() ? auth()->user() : null;
+$inProject = class_exists('ProjectContext') && ProjectContext::has();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,9 +20,14 @@ $currentUser = is_installed() ? auth()->user() : null;
             <?php if (!is_installed()): ?>
                 <a href="<?= e(url_path('/install')) ?>">Install</a>
             <?php elseif ($currentUser !== null): ?>
+                <a href="<?= e(url_path('/projects')) ?>">Projects</a>
+                <?php if ($inProject): ?>
+                    <a href="<?= e(url_path(project()->url('dashboard'))) ?>">Dashboard</a>
+                    <a href="<?= e(url_path(project()->url('profile'))) ?>">Project profile</a>
+                <?php endif; ?>
                 <a href="<?= e(url_path('/profile')) ?>">Profile</a>
                 <?php if (($currentUser['role'] ?? '') === 'admin'): ?>
-                    <span class="nav-meta">Admin</span>
+                    <a href="<?= e(url_path('/founder')) ?>">Founder</a>
                 <?php endif; ?>
                 <a href="<?= e(url_path('/logout')) ?>">Sign out</a>
             <?php else: ?>

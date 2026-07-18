@@ -114,6 +114,26 @@ function platform_db(): Database
     return Database::platform(app_root());
 }
 
+function project_db(): Database
+{
+    return ProjectContext::database();
+}
+
+function project(): Project
+{
+    return ProjectContext::project();
+}
+
+function current_project_slug(): string
+{
+    return project()->slug();
+}
+
+function lab_event(string $eventName, array $data = []): void
+{
+    EventLogger::log($eventName, $data);
+}
+
 function lab_log(string $level, string $message, array $context = []): void
 {
     $line = '[' . gmdate('c') . '] ' . strtoupper($level) . ' ' . $message;
@@ -168,6 +188,33 @@ function format_app_time(?string $utcIso): string
 function view(string $name, array $data = [], ?string $layout = 'main'): void
 {
     View::render(app_root(), $name, $data, $layout);
+}
+
+function project_view(string $name, array $data = [], ?string $layout = 'main'): void
+{
+    $project = project();
+    $viewFile = $project->directory() . '/app/views/' . $name . '.php';
+    if (!is_file($viewFile)) {
+        throw new RuntimeException('Project view not found: ' . $name);
+    }
+
+    extract($data, EXTR_SKIP);
+    ob_start();
+    require $viewFile;
+    $content = (string) ob_get_clean();
+
+    if ($layout === null) {
+        echo $content;
+        return;
+    }
+
+    $layoutFile = app_root() . '/app/shared/views/layouts/' . $layout . '.php';
+    if (!is_file($layoutFile)) {
+        echo $content;
+        return;
+    }
+
+    require $layoutFile;
 }
 
 function auth(): Auth

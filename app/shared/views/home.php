@@ -5,7 +5,7 @@
 <section class="panel">
     <p class="eyebrow">SaaS Lab</p>
     <h1>Build. Test. Validate.</h1>
-    <p class="lede">Shared authentication is online. Project launching and the Founder Dashboard arrive in later phases.</p>
+    <p class="lede">A lightweight PHP and SQLite workspace for launching authenticated SaaS experiments without rebuilding infrastructure.</p>
 </section>
 
 <?php foreach ($flashes as $flash): ?>
@@ -17,8 +17,11 @@
         <h2>Signed in as <?= e((string) $user['name']) ?></h2>
         <p class="muted"><?= e((string) $user['email']) ?> · <?= e((string) $user['role']) ?></p>
         <div class="button-row">
-            <a class="button button-primary" href="<?= e(url_path('/profile')) ?>">Profile</a>
-            <a class="button" href="<?= e(url_path('/logout')) ?>">Sign out</a>
+            <a class="button button-primary" href="<?= e(url_path('/projects')) ?>">Browse projects</a>
+            <?php if (($user['role'] ?? '') === 'admin'): ?>
+                <a class="button" href="<?= e(url_path('/founder')) ?>">Founder Dashboard</a>
+            <?php endif; ?>
+            <a class="button" href="<?= e(url_path('/profile')) ?>">Profile</a>
         </div>
     <?php else: ?>
         <h2>Get started</h2>
