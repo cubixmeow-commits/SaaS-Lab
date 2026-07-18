@@ -12,20 +12,61 @@ SaaS Lab is a lightweight PHP and SQLite workspace for rapidly building, testing
 
 - PHP 8.2+
 - PDO SQLite
-- Apache with `mod_rewrite` (Hostinger shared hosting)
+- Apache with `mod_rewrite`
 - Writable directories: `data/`, `storage/logs/`, `storage/uploads/`, `projects/`
 
 No Node.js, Docker, Composer packages, or build step required.
 
-## Installation (Hostinger)
+## Installation
 
-1. Upload or sync this repository.
-2. Point the domain document root to `public/`.
-3. Copy `config.local.example.php` to `config.local.php`.
-4. Set `base_url` to your production URL (subdirectory installs are supported; session cookie path is derived automatically).
-5. Ensure `data/`, `storage/`, and `projects/` are writable (`chmod 775` via File Manager if needed).
-6. Visit `/install` and create the first administrator.
-7. Register a member, sign in as admin, and create your first project from `/founder`.
+1. Deploy the application (see **cPanel Deployment** below for Namecheap, or sync files so the web root serves `public/`).
+2. Copy `config.local.example.php` to `config.local.php` in the **application root** (not the public web root).
+3. Set `base_url` to your production URL (subdirectory installs are supported; session cookie path is derived automatically).
+4. Ensure `data/`, `storage/`, and `projects/` are writable (`chmod 775` if needed).
+5. Visit `/install` and create the first administrator.
+6. Register a member, sign in as admin, and create your first project from `/founder`.
+
+## cPanel Deployment
+
+Namecheap cPanel Git Version Control deploys through the root `.cpanel.yml` file.
+
+| Item | Value |
+|------|--------|
+| Destination (document root) | `/home/iainmcok/public_html/` |
+| Private application root | `/home/iainmcok/saas-lab/` |
+| Web source published | contents of `public/` only |
+| Production branch | `main` |
+| Build command | none (plain PHP; no Composer/npm) |
+
+**What is copied**
+
+- Into `/home/iainmcok/saas-lab/`: `app/`, `core/`, `migrations/`, `templates/`, `config/config.example.php`, `config.local.example.php`, `SECURITY.md`
+- Into `/home/iainmcok/public_html/`: everything under `public/` (`index.php`, `.htaccess`, `assets/`), plus a non-public `.saas-lab-root` marker pointing at the private app root
+
+**Deliberately excluded from deployment**
+
+- `.git`, `.github`, `.cpanel.yml`
+- `docs/`, `scripts/`
+- `config.local.php` (never overwritten; create once on the server)
+- SQLite databases, WAL/journal sidecars, `data/installed.lock`
+- logs, uploads, IDE files, credentials, `.env*`
+
+**Persistent directories that must not be overwritten**
+
+- `/home/iainmcok/saas-lab/data/` (platform SQLite, install lock)
+- `/home/iainmcok/saas-lab/projects/` (generated projects and their SQLite files)
+- `/home/iainmcok/saas-lab/storage/logs/`
+- `/home/iainmcok/saas-lab/storage/uploads/`
+- `/home/iainmcok/saas-lab/config.local.php`
+
+The deploy script creates those directories when missing and replaces only application code directories.
+
+**cPanel workflow**
+
+1. Push to GitHub `main`.
+2. In cPanel → Git Version Control → **Update from Remote**.
+3. **Deploy HEAD Commit**.
+4. On first deploy only: copy `config.local.example.php` → `config.local.php` under `/home/iainmcok/saas-lab/`, set `base_url` (for example `https://iainreid.dev`), then visit `/install`.
 
 ## Core loop
 
