@@ -271,6 +271,61 @@ button.button-primary:hover {
     border-color: rgba(61, 156, 240, 0.35);
 }
 
+.form-footer {
+    margin: 1rem 0 0;
+}
+
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.detail-list {
+    margin: 0 0 1.25rem;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.detail-list div {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.detail-list dt {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.detail-list dd {
+    margin: 0;
+}
+
+.status-label,
+.nav-meta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0.1rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.site-nav a {
+    margin-left: 0;
+}
+
 @media (max-width: 640px) {
     .site-footer {
         flex-direction: column;
@@ -279,5 +334,11 @@ button.button-primary:hover {
     .panel,
     .install-hero {
         padding: 1.1rem;
+    }
+
+    .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 }

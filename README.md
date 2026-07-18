@@ -32,6 +32,6 @@ Install from migrations → create a shared user → create a project → open i
 
 ## Status
 
-Phase 1 (foundation + installer) is in progress. See `docs/V1_IMPLEMENTATION_PLAN.md` and `docs/PHASE_STATUS.md`.
+Phases 1–2 complete (foundation + shared authentication). See `docs/V1_IMPLEMENTATION_PLAN.md` and `docs/PHASE_STATUS.md`.
 
 V1 focuses on project launching and basic usage measurement; broader validation and portfolio-management tools may come later.
