@@ -1,0 +1,18 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow real files and directories (assets, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Front controller
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Deny access to sensitive artifacts if document root is misconfigured
+<FilesMatch "\.(sqlite|sqlite3|db|log|lock)$">
+    Require all denied
+</FilesMatch>
