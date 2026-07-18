@@ -1,0 +1,18 @@
+---
+deployment:
+  tasks:
+    # Split deploy for SaaS Lab:
+    # - Application code lives outside the web root at APPPATH
+    # - Only public/ web assets are published to DEPLOYPATH (document root)
+    # Each task runs in a fresh shell on cPanel, so exports are repeated.
+    - export APPPATH=/home/iainmcok/saas-lab/; export DEPLOYPATH=/home/iainmcok/public_html/; /bin/mkdir -p "$APPPATH" "$APPPATH/config" "$APPPATH/data" "$APPPATH/projects" "$APPPATH/storage/logs" "$APPPATH/storage/uploads" "$DEPLOYPATH"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/rm -rf "$APPPATH/app"; /bin/cp -R app "$APPPATH/"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/rm -rf "$APPPATH/core"; /bin/cp -R core "$APPPATH/"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/rm -rf "$APPPATH/migrations"; /bin/cp -R migrations "$APPPATH/"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/rm -rf "$APPPATH/templates"; /bin/cp -R templates "$APPPATH/"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/cp config/config.example.php "$APPPATH/config/config.example.php"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/cp config.local.example.php "$APPPATH/config.local.example.php"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/cp SECURITY.md "$APPPATH/SECURITY.md"
+    - export APPPATH=/home/iainmcok/saas-lab/; /bin/chmod 775 "$APPPATH/data" "$APPPATH/projects" "$APPPATH/storage" "$APPPATH/storage/logs" "$APPPATH/storage/uploads"
+    - export DEPLOYPATH=/home/iainmcok/public_html/; /bin/cp -R public/. "$DEPLOYPATH"
+    - export APPPATH=/home/iainmcok/saas-lab/; export DEPLOYPATH=/home/iainmcok/public_html/; /bin/printf '%s\n' "$APPPATH" > "$DEPLOYPATH/.saas-lab-root"; /bin/chmod 640 "$DEPLOYPATH/.saas-lab-root"

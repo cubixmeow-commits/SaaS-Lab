@@ -16,3 +16,8 @@ Options -Indexes
 <FilesMatch "\.(sqlite|sqlite3|db|log|lock)$">
     Require all denied
 </FilesMatch>
+
+# cPanel split-deploy marker must never be web-readable
+<Files ".saas-lab-root">
+    Require all denied
+</Files>
